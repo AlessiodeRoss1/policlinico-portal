@@ -11,7 +11,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname));
 
-// DB
+// DATABASE
 const db = new sqlite3.Database("db.sqlite");
 
 db.run(`
@@ -25,24 +25,26 @@ CREATE TABLE IF NOT EXISTS reports (
 )
 `);
 
-// -------------------- PAGES --------------------
+// ---------------- HOME ----------------
 app.get("/", (req, res) => {
   res.sendFile(__dirname + "/index.html");
 });
 
+// ---------------- WHISTLEBLOWING ----------------
 app.get("/whistleblowing", (req, res) => {
-  res.sendFile(__dirname + "/whistleblowing.html");
+  res.sendFile(__dirname + "/whistleblowing/index.html");
 });
 
+// ---------------- RESPONSABILE ----------------
 app.get("/responsabile", (req, res) => {
   res.sendFile(__dirname + "/responsabile.html");
 });
 
-// -------------------- API INVIO --------------------
+// ---------------- INVIO SEGNALAZIONE ----------------
 app.post("/api/segnalazione", (req, res) => {
   const { obj, desc, category } = req.body;
 
-  const code = Math.random().toString(36).substring(2, 10);
+  const code = "WH-" + Math.random().toString(36).substring(2, 8).toUpperCase();
 
   db.run(
     "INSERT INTO reports (code, obj, desc, category, status) VALUES (?, ?, ?, ?, ?)",
@@ -52,27 +54,26 @@ app.post("/api/segnalazione", (req, res) => {
   res.json({ ok: true, code });
 });
 
-// -------------------- API VERIFICA --------------------
+// ---------------- VERIFICA ----------------
 app.get("/api/verifica/:code", (req, res) => {
   db.get(
     "SELECT * FROM reports WHERE code = ?",
     [req.params.code],
     (err, row) => {
-      if (!row) return res.json({ error: "non trovato" });
-
+      if (!row) return res.json({ error: "not found" });
       res.json(row);
     }
   );
 });
 
-// -------------------- API LISTA RESPONSABILE --------------------
+// ---------------- LISTA RESPONSABILE ----------------
 app.get("/api/reports", (req, res) => {
   db.all("SELECT * FROM reports", (err, rows) => {
     res.json(rows);
   });
 });
 
-// -------------------- API UPDATE STATUS --------------------
+// ---------------- AGGIORNA STATO ----------------
 app.post("/api/status", (req, res) => {
   const { code, status } = req.body;
 
@@ -84,7 +85,7 @@ app.post("/api/status", (req, res) => {
   res.json({ ok: true });
 });
 
-// -------------------- START --------------------
+// ---------------- START ----------------
 app.listen(PORT, () => {
   console.log("Server attivo su porta " + PORT);
 });

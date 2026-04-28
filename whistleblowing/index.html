@@ -12,9 +12,7 @@ body{
   padding:20px;
 }
 
-h2{
-  margin-top:0;
-}
+h2{ margin-top:0; }
 
 .box{
   background:white;
@@ -27,8 +25,7 @@ h2{
 input, select, textarea, button{
   width:100%;
   padding:10px;
-  margin-top:8px;
-  margin-bottom:10px;
+  margin:8px 0;
   border-radius:6px;
   border:1px solid #ccc;
   box-sizing:border-box;
@@ -72,13 +69,6 @@ button:hover{
 
   <textarea id="desc" placeholder="Descrizione"></textarea>
 
-  <input id="place" placeholder="Luogo evento">
-  <input id="date" type="date">
-
-  <label>
-    <input type="checkbox" id="anon"> Segnalazione anonima
-  </label>
-
   <button onclick="send()">Invia segnalazione</button>
 
   <p id="result"></p>
@@ -88,7 +78,7 @@ button:hover{
 <div class="box">
   <h3>Verifica segnalazione</h3>
 
-  <input id="code" placeholder="Inserisci codice (es. WH-XXXXXX)">
+  <input id="code" placeholder="Inserisci codice (WH-XXXXXX)">
   <button onclick="check()">Verifica</button>
 
   <div id="out"></div>
