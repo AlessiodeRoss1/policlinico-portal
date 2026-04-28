@@ -6,31 +6,27 @@ const app = express();
 app.use(express.json());
 
 /* =========================
-   FORZA CARTELLA PUBLIC
+   ROUTE ESPLICITE (NO CONFLITTI)
 ========================= */
-app.use(express.static(path.join(__dirname, "public")));
 
-/* =========================
-   HOME PAGE ESPLICITA
-========================= */
+/* HOME */
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-/* =========================
-   WHISTLEBLOWING ISOLATO
-========================= */
-app.use(
-  "/whistleblowing",
-  express.static(path.join(__dirname, "whistleblowing"))
-);
-
-/* =========================
-   HEALTH CHECK (RENDER)
-========================= */
-app.get("/health", (req, res) => {
-  res.send("OK");
+/* ALTRE PAGINE */
+app.get("/il-policlinico", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "il-policlinico.html"));
 });
+
+/* WHISTLEBLOWING */
+app.get("/whistleblowing", (req, res) => {
+  res.sendFile(path.join(__dirname, "whistleblowing", "index.html"));
+});
+
+/* STATIC FILES SEPARATI (NO OVERLAP) */
+app.use("/assets", express.static(path.join(__dirname, "public")));
+app.use("/whistle-assets", express.static(path.join(__dirname, "whistleblowing")));
 
 const PORT = process.env.PORT || 3000;
 
