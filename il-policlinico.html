@@ -8,8 +8,8 @@
 body{
 margin:0;
 font-family:Segoe UI, Arial;
-background:#f4f6f8;
 color:#0b2f4f;
+background:#f7f7f7;
 }
 
 /* HEADER */
@@ -17,101 +17,79 @@ color:#0b2f4f;
 display:flex;
 justify-content:space-between;
 align-items:center;
-padding:15px 30px;
+padding:15px 20px;
 background:white;
 border-bottom:1px solid #ddd;
 }
 
+/* LOGO */
 .logo img{
-height:65px;
+height:70px;
 }
 
+/* MENU */
 .menu a{
-margin-left:18px;
+margin-left:15px;
 text-decoration:none;
 color:#0b2f4f;
-font-weight:600;
+font-weight:bold;
 }
 
-.menu a:hover{
-color:#0b6b4f;
-}
-
-/* CONTAINER */
-.container{
+/* BREADCRUMB */
+.breadcrumb{
 max-width:1000px;
-margin:30px auto;
+margin:15px auto;
 padding:0 20px;
+font-size:14px;
+color:#666;
 }
 
-/* HERO */
-.hero{
+.breadcrumb a{
+color:#0b2f4f;
+text-decoration:none;
+font-weight:bold;
+}
+
+/* INTRO */
+.intro{
+max-width:1000px;
+margin:20px auto;
+padding:20px;
 background:white;
-padding:25px;
-border-radius:12px;
-box-shadow:0 4px 12px rgba(0,0,0,0.06);
+border-radius:10px;
 }
 
-.hero h1{
-margin-top:0;
-color:#0b6b4f;
-}
-
-/* GRID */
+/* BOX GRID */
 .grid{
-margin-top:25px;
+max-width:1000px;
+margin:20px auto;
 display:grid;
 grid-template-columns:repeat(2, 1fr);
 gap:20px;
+padding:0 20px;
 }
 
 /* CARD */
 .card{
 background:white;
 padding:20px;
-border-radius:12px;
-box-shadow:0 4px 12px rgba(0,0,0,0.08);
-transition:0.2s;
-}
-
-.card:hover{
-transform:translateY(-3px);
+border-radius:10px;
+box-shadow:0 2px 8px rgba(0,0,0,0.08);
 }
 
 .card h3{
 margin-top:0;
 }
 
-.card p{
-color:#555;
-}
-
-/* BUTTON */
+/* BUTTON VAI */
 .btn{
 display:inline-block;
-margin-top:10px;
-padding:10px 14px;
-background:#0b6b4f;
+margin-top:15px;
+padding:10px 15px;
+background:#0b2f4f;
 color:white;
 text-decoration:none;
 border-radius:6px;
-font-weight:bold;
-}
-
-.btn:hover{
-background:#09543d;
-}
-
-/* BREADCRUMB */
-.breadcrumb{
-font-size:13px;
-margin:15px 0;
-color:#777;
-}
-
-.breadcrumb a{
-color:#0b2f4f;
-text-decoration:none;
 font-weight:bold;
 }
 </style>
@@ -122,66 +100,55 @@ font-weight:bold;
 
 <!-- HEADER -->
 <div class="header">
-
   <div class="logo">
-    <img src="logo-gemelli.png" alt="Logo">
+    <img src="logo-gemelli.png">
   </div>
 
   <div class="menu">
-    <a href="/">Home</a>
-    <a href="/il-policlinico">Il Policlinico</a>
-    <a href="/whistleblowing">Whistleblowing</a>
-    <a href="/pazienti">Area Pazienti</a>
+    <a href="index.html">Home</a>
+    <a href="il-policlinico.html">Il Policlinico</a>
   </div>
-
 </div>
-
-<!-- CONTENUTO -->
-<div class="container">
 
 <!-- BREADCRUMB -->
 <div class="breadcrumb">
-<a href="/">Home</a> / Il Policlinico
+  <a href="index.html">Home</a> / Il Policlinico
 </div>
 
-<!-- HERO -->
-<div class="hero">
-<h1>Il Policlinico</h1>
-<p>
-Il Policlinico rappresenta un centro sanitario di eccellenza dove
-assistenza, ricerca e innovazione si integrano per garantire cure moderne
-e di qualità ai pazienti.
-</p>
+<!-- INTRO -->
+<div class="intro">
+  <h2>Il Policlinico</h2>
+  <p>
+    La Fondazione Policlinico Universitario Agostino Gemelli IRCCS è il luogo in cui competenze scientifiche e tecniche, sensibilità umana, etica e valori cattolici diventano un impegno al servizio di tutti.
+  </p>
 </div>
 
-<!-- GRID -->
+<!-- BOX -->
 <div class="grid">
 
-<div class="card">
-<h3>Storia e futuro</h3>
-<p>Il percorso evolutivo della struttura e le innovazioni future.</p>
-<a class="btn" href="/storia-e-futuro">Vai</a>
-</div>
+  <div class="card">
+    <h3>Storia e futuro</h3>
+    <p>Il percorso verso l’IRCCS e le sfide di domani.</p>
+    <a class="btn" href="storia-e-futuro.html">VAI</a>
+  </div>
 
-<div class="card">
-<h3>Struttura e organizzazione</h3>
-<p>Reparti, servizi e organizzazione interna del Policlinico.</p>
-<a class="btn" href="/struttura-e-organizzazione">Vai</a>
-</div>
+  <div class="card">
+    <h3>Struttura e organizzazione</h3>
+    <p>Organizzazione interna della Fondazione.</p>
+    <a class="btn" href="struttura-e-organizzazione.html">VAI</a>
+  </div>
 
-<div class="card">
-<h3>Whistleblowing</h3>
-<p>Sistema di segnalazione anonima e tracciamento stato.</p>
-<a class="btn" href="/whistleblowing">Vai</a>
-</div>
+  <div class="card">
+    <h3>Whistleblowing</h3>
+    <p>Segnalazioni di condotte non conformi.</p>
+    <a class="btn" href="whistleblowing">VAI</a>
+  </div>
 
-<div class="card">
-<h3>Area Pazienti</h3>
-<p>Gestione informazioni e servizi per i pazienti.</p>
-<a class="btn" href="/pazienti">Vai</a>
-</div>
-
-</div>
+  <div class="card">
+    <h3>Parità di genere</h3>
+    <p>Impegni e politiche di inclusione.</p>
+    <a class="btn" href="parita-di-genere.html">VAI</a>
+  </div>
 
 </div>
 
