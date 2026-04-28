@@ -49,7 +49,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/whistleblowing", (req, res) => {
-  res.sendFile(__dirname + "/whistleblowing/index.html");
+  res.sendFile(__dirname + "/whistleblowing");
 });
 
 app.get("/pazienti", (req, res) => {
