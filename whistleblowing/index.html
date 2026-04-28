@@ -159,6 +159,12 @@ margin-top:10px;
 <!-- SINISTRA -->
 <div class="left">
 
+<img src="./logo-gemelli.png">
+
+<p>Sistema anonimo e sicuro del Policlinico.</p>
+
+</div>
+
 <!-- FIX LOGO PATH -->
 <img src="./logo-gemelli.png" onerror="this.style.display='none'">
 
@@ -181,6 +187,8 @@ margin-top:10px;
 
 <!-- INSERISCI (FORM COMPLETO) -->
 <div id="ins">
+
+<<input id="email" placeholder="La tua email">
 
 <input id="obj" placeholder="Oggetto segnalazione">
 
@@ -275,20 +283,22 @@ return "WH-"+Math.floor(100000+Math.random()*900000);
 /* INSERIMENTO */
 function send(){
 
+let email=document.getElementById("email").value;
 let obj=document.getElementById("obj").value;
 let cat=document.getElementById("cat").value;
 let desc=document.getElementById("desc").value;
 let anon=document.getElementById("anon").value;
 
-let c=code();
-
-reports.push({
-code:c,
-obj,cat,desc,
-status:"Ricevuta"
+fetch("/api/segnalazione",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({email,obj,cat,desc,anon})
+})
+.then(r=>r.json())
+.then(data=>{
+document.getElementById("out1").innerHTML=
+"Codice: <b>"+data.code+"</b><br>Controlla la tua email";
 });
-
-document.getElementById("out1").innerHTML="Codice: <b>"+c+"</b>";
 
 }
 
