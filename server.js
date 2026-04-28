@@ -1,64 +1,20 @@
 const express = require("express");
 const path = require("path");
-const nodemailer = require("nodemailer");
 
 const app = express();
 
 app.use(express.json());
-app.use(express.static(path.join(__dirname, "whistleblowing"))); 
-// 👆 IMPORTANTISSIMO: serve index.html automaticamente
 
-let reports=[];
+/* 🔥 SERVE ESATTAMENTE LA CARTELLA CORRETTA */
+app.use(express.static(path.join(__dirname, "whistleblowing")));
 
-function code(){
-return "WH-"+Math.floor(100000+Math.random()*900000);
-}
-
-/* EMAIL */
-const transporter = nodemailer.createTransport({
-service:"gmail",
-auth:{
-user:"policlinicogemellirrp@gmail.com",
-pass:"wxdy rwnu nixn iexs"
-}
+/* 🔥 FORZA LA ROOT "/" */
+app.get("/", (req, res) => {
+res.sendFile(path.join(__dirname, "whistleblowing", "index.html"));
 });
 
-/* API INSERIMENTO */
-app.post("/api/segnalazione",(req,res)=>{
+const PORT = process.env.PORT || 3000;
 
-let c=code();
-
-let r={
-code:c,
-email:req.body.email,
-obj:req.body.obj,
-cat:req.body.cat,
-desc:req.body.desc,
-status:"Ricevuta"
-};
-
-reports.push(r);
-
-transporter.sendMail({
-from:"Whistleblowing <policlinicogemellirrp@gmail.com>",
-to:req.body.email,
-subject:"Segnalazione "+c,
-text:`Codice: ${c}\nStato: Ricevuta`
+app.listen(PORT, () => {
+console.log("Server attivo su porta " + PORT);
 });
-
-res.json({code:c});
-
-});
-
-/* VERIFICA */
-app.get("/api/verifica/:code",(req,res)=>{
-
-let r=reports.find(x=>x.code===req.params.code);
-if(!r) return res.json({error:true});
-
-res.json(r);
-
-});
-
-const PORT=process.env.PORT||3000;
-app.listen(PORT,()=>console.log("Server attivo "+PORT));
