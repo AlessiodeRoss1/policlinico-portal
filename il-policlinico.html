@@ -2,120 +2,117 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<title>Whistleblowing</title>
+<title>Il Policlinico</title>
 
 <style>
 body{
 margin:0;
 font-family:Segoe UI, Arial;
-background:#eef2f5;
+background:#f4f6f8;
 color:#0b2f4f;
 }
 
-/* HEADER SEMPLICE */
-header{
+/* HEADER */
+.header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:15px 30px;
 background:white;
-padding:15px 25px;
 border-bottom:1px solid #ddd;
-font-weight:bold;
 }
 
-/* CONTAINER DUE COLONNE */
+.logo img{
+height:65px;
+}
+
+.menu a{
+margin-left:18px;
+text-decoration:none;
+color:#0b2f4f;
+font-weight:600;
+}
+
+.menu a:hover{
+color:#0b6b4f;
+}
+
+/* CONTAINER */
 .container{
-display:flex;
-gap:20px;
-max-width:1100px;
+max-width:1000px;
 margin:30px auto;
 padding:0 20px;
 }
 
-/* BOX */
-.box{
-flex:1;
+/* HERO */
+.hero{
 background:white;
-padding:20px;
+padding:25px;
 border-radius:12px;
-box-shadow:0 5px 15px rgba(0,0,0,0.08);
+box-shadow:0 4px 12px rgba(0,0,0,0.06);
 }
 
-/* TITOLI */
-h2{
+.hero h1{
 margin-top:0;
 color:#0b6b4f;
 }
 
-/* INPUT */
-input, select, textarea, button{
-width:100%;
-padding:10px;
-margin-top:10px;
-border-radius:6px;
-border:1px solid #ccc;
-font-family:inherit;
+/* GRID */
+.grid{
+margin-top:25px;
+display:grid;
+grid-template-columns:repeat(2, 1fr);
+gap:20px;
 }
 
-textarea{
-resize:none;
-height:120px;
+/* CARD */
+.card{
+background:white;
+padding:20px;
+border-radius:12px;
+box-shadow:0 4px 12px rgba(0,0,0,0.08);
+transition:0.2s;
+}
+
+.card:hover{
+transform:translateY(-3px);
+}
+
+.card h3{
+margin-top:0;
+}
+
+.card p{
+color:#555;
 }
 
 /* BUTTON */
-button{
+.btn{
+display:inline-block;
+margin-top:10px;
+padding:10px 14px;
 background:#0b6b4f;
 color:white;
-border:none;
-cursor:pointer;
+text-decoration:none;
+border-radius:6px;
 font-weight:bold;
 }
 
-button:hover{
+.btn:hover{
 background:#09543d;
 }
 
-/* RISULTATO */
-.result{
-margin-top:10px;
-font-weight:bold;
+/* BREADCRUMB */
+.breadcrumb{
+font-size:13px;
+margin:15px 0;
+color:#777;
+}
+
+.breadcrumb a{
 color:#0b2f4f;
-}
-
-/* VERIFICA BOX */
-.report{
-margin-top:15px;
-padding:15px;
-border-radius:10px;
-background:#f7f9fb;
-border:1px solid #ddd;
-}
-
-/* STATUS LINE */
-.status{
-margin-top:15px;
-display:flex;
-justify-content:space-between;
-font-size:12px;
-}
-
-.step{
-text-align:center;
-flex:1;
-position:relative;
-}
-
-.circle{
-width:14px;
-height:14px;
-border-radius:50%;
-background:#ccc;
-margin:auto;
-}
-
-.active .circle{
-background:#0b6b4f;
-}
-
-.label{
-margin-top:5px;
+text-decoration:none;
+font-weight:bold;
 }
 </style>
 
@@ -123,109 +120,70 @@ margin-top:5px;
 
 <body>
 
-<header>
-Whistleblowing System
-</header>
+<!-- HEADER -->
+<div class="header">
 
+  <div class="logo">
+    <img src="logo-gemelli.png" alt="Logo">
+  </div>
+
+  <div class="menu">
+    <a href="/">Home</a>
+    <a href="/il-policlinico">Il Policlinico</a>
+    <a href="/whistleblowing">Whistleblowing</a>
+    <a href="/pazienti">Area Pazienti</a>
+  </div>
+
+</div>
+
+<!-- CONTENUTO -->
 <div class="container">
 
-<!-- COLONNA SINISTRA: INSERIMENTO -->
-<div class="box">
-<h2>Inserisci segnalazione</h2>
-
-<input id="obj" placeholder="Oggetto">
-
-<select id="category">
-<option>Corruzione</option>
-<option>Abuso</option>
-<option>Sicurezza</option>
-<option>Altro</option>
-</select>
-
-<textarea id="desc" placeholder="Descrizione dettagliata"></textarea>
-
-<button onclick="send()">Invia segnalazione</button>
-
-<div class="result" id="result"></div>
+<!-- BREADCRUMB -->
+<div class="breadcrumb">
+<a href="/">Home</a> / Il Policlinico
 </div>
 
-<!-- COLONNA DESTRA: VERIFICA -->
-<div class="box">
-<h2>Verifica segnalazione</h2>
+<!-- HERO -->
+<div class="hero">
+<h1>Il Policlinico</h1>
+<p>
+Il Policlinico rappresenta un centro sanitario di eccellenza dove
+assistenza, ricerca e innovazione si integrano per garantire cure moderne
+e di qualità ai pazienti.
+</p>
+</div>
 
-<input id="code" placeholder="Codice (es. WH-123456)">
-<button onclick="check()">Verifica stato</button>
+<!-- GRID -->
+<div class="grid">
 
-<div id="out"></div>
+<div class="card">
+<h3>Storia e futuro</h3>
+<p>Il percorso evolutivo della struttura e le innovazioni future.</p>
+<a class="btn" href="/storia-e-futuro">Vai</a>
+</div>
+
+<div class="card">
+<h3>Struttura e organizzazione</h3>
+<p>Reparti, servizi e organizzazione interna del Policlinico.</p>
+<a class="btn" href="/struttura-e-organizzazione">Vai</a>
+</div>
+
+<div class="card">
+<h3>Whistleblowing</h3>
+<p>Sistema di segnalazione anonima e tracciamento stato.</p>
+<a class="btn" href="/whistleblowing">Vai</a>
+</div>
+
+<div class="card">
+<h3>Area Pazienti</h3>
+<p>Gestione informazioni e servizi per i pazienti.</p>
+<a class="btn" href="/pazienti">Vai</a>
 </div>
 
 </div>
 
-<script>
-
-function renderStatus(status){
-
-const steps=["Ricevuta","In verifica","In lavorazione","Chiusa"];
-let current=steps.indexOf(status);
-
-return `
-<div class="status">
-${steps.map((s,i)=>`
-<div class="step ${i<=current?'active':''}">
-<div class="circle"></div>
-<div class="label">${s}</div>
 </div>
-`).join("")}
-</div>
-`;
-
-}
-
-async function send(){
-
-let obj=document.getElementById("obj").value;
-let category=document.getElementById("category").value;
-let desc=document.getElementById("desc").value;
-
-let res=await fetch("/api/segnalazione",{
-method:"POST",
-headers:{"Content-Type":"application/json"},
-body:JSON.stringify({obj,category,desc})
-});
-
-let data=await res.json();
-
-document.getElementById("result").innerHTML=
-"Codice assegnato: <b>"+data.code+"</b>";
-}
-
-async function check(){
-
-let code=document.getElementById("code").value;
-
-let res=await fetch("/api/verifica/"+code);
-let data=await res.json();
-
-if(data.error){
-document.getElementById("out").innerHTML="Segnalazione non trovata";
-return;
-}
-
-document.getElementById("out").innerHTML=`
-<div class="report">
-<b>Codice:</b> ${data.code}<br>
-<b>Oggetto:</b> ${data.obj}<br>
-<b>Categoria:</b> ${data.category}<br>
-<b>Stato:</b> ${data.status}
-
-${renderStatus(data.status)}
-
-</div>
-`;
-
-}
-
-</script>
 
 </body>
 </html>
