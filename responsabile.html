@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>Responsabile</title>
+
+<style>
+body{font-family:Arial;background:#f4f6f8;padding:20px}
+h2{margin-top:0}
+
+.card{
+background:white;
+padding:15px;
+margin:10px 0;
+border-radius:10px;
+box-shadow:0 5px 15px rgba(0,0,0,0.1);
+}
+
+select,button{
+padding:8px;
+margin-top:8px;
+}
+
+button{
+background:#0b6b4f;
+color:white;
+border:none;
+border-radius:6px;
+cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<h2>Dashboard Responsabile</h2>
+
+<div id="list"></div>
+
+<script>
+
+async function load(){
+
+let r=await fetch("/api/reports");
+let data=await r.json();
+
+list.innerHTML="";
+
+data.forEach(x=>{
+
+let d=document.createElement("div");
+d.className="card";
+
+d.innerHTML=`
+<b>Codice:</b> ${x.code}<br>
+<b>Oggetto:</b> ${x.obj || "-"}<br>
+<b>Descrizione:</b> ${x.desc || "-"}<br>
+<b>Stato:</b> ${x.status}<br>
+
+<select id="${x.code}">
+<option>Ricevuta</option>
+<option>In analisi</option>
+<option>In lavorazione</option>
+<option>Chiusa</option>
+</select>
+
+<button onclick="upd('${x.code}')">Aggiorna</button>
+`;
+
+list.appendChild(d);
+
+});
+
+}
+
+async function upd(code){
+
+let status=document.getElementById(code).value;
+
+await fetch("/api/status",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({code,status})
+});
+
+load();
+
+}
+
+load();
+
+</script>
+
+</body>
+</html>

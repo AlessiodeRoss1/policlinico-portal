@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>Whistleblowing</title>
+
+<style>
+body{margin:0;font-family:Segoe UI;}
+
+.wrapper{display:flex;height:100vh;}
+
+.left{width:50%;display:flex;align-items:center;justify-content:center;background:#fff;}
+.left img{width:280px;}
+
+.right{width:50%;display:flex;align-items:center;justify-content:center;background:#4f5c63;}
+
+.card{width:520px;background:#fff;padding:25px;border-radius:10px;}
+
+.tabs{display:flex;border-bottom:1px solid #ddd;margin-bottom:20px;}
+.tab{flex:1;text-align:center;padding:10px;cursor:pointer;color:#1a73e8;}
+.tab.active{color:#0b6b4f;font-weight:600;border-bottom:2px solid #0b6b4f;}
+
+input,textarea,select{
+width:100%;padding:10px;margin-top:10px;border:1px solid #ccc;border-radius:6px;
+}
+
+button{margin-top:10px;padding:10px 15px;border:none;border-radius:5px;cursor:pointer;}
+
+.btn-green{background:#0b6b4f;color:#fff;}
+.btn-grey{background:#666;color:#fff;}
+
+.report{border:1px solid #ddd;margin-top:10px;padding:10px;border-radius:6px;cursor:pointer;}
+
+.badge{font-size:12px;background:#eee;padding:3px 8px;border-radius:5px;}
+</style>
+
+</head>
+
+<body>
+
+<div class="wrapper">
+
+<div class="left">
+<img src="logo-gemelli.png">
+</div>
+
+<div class="right">
+
+<div class="card">
+
+<!-- TABS -->
+<div class="tabs">
+<div class="tab active" onclick="showTab('insert',this)">INSERISCI</div>
+<div class="tab" onclick="showTab('verify',this)">VERIFICA</div>
+<div class="tab" onclick="showTab('resp',this)">RESPONSABILI</div>
+</div>
+
+<!-- INSERISCI -->
+<div id="insert">
+
+<div id="formBox">
+
+<input id="obj" placeholder="Oggetto segnalazione">
+<textarea id="desc" placeholder="Descrizione"></textarea>
+<input id="anon" placeholder="Anonimo SI/NO">
+
+<button class="btn-green" onclick="send()">INVIA</button>
+
+</div>
+
+<div id="success" style="display:none;text-align:center">
+<h3>Segnalazione inviata</h3>
+<div id="code"></div>
+<button class="btn-green" onclick="reset()">OK</button>
+</div>
+
+</div>
+
+<!-- VERIFICA -->
+<div id="verify" style="display:none">
+
+<input id="check" placeholder="Codice">
+
+<button class="btn-green" onclick="verify()">VERIFICA</button>
+
+<div id="result"></div>
+
+<div id="track" style="display:none;margin-top:20px">
+<div><b>Stato:</b> <span id="status"></span></div>
+</div>
+
+</div>
+
+<!-- RESPONSABILI -->
+<div id="resp" style="display:none">
+
+<div id="login">
+<input id="u" placeholder="user">
+<input id="p" type="password" placeholder="pass">
+<button class="btn-green" onclick="login()">ENTRA</button>
+</div>
+
+<div id="panel" style="display:none">
+
+<h4>Segnalazioni</h4>
+
+<div id="list"></div>
+
+<h4>Cambia stato</h4>
+
+<select id="st">
+<option>Ricevuta</option>
+<option>In analisi</option>
+<option>In revisione</option>
+<option>Chiusa</option>
+</select>
+
+<button class="btn-green" onclick="change()">Aggiorna</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+let reports=[];
+
+let selected=null;
+
+function showTab(t,el){
+
+document.getElementById("insert").style.display="none";
+document.getElementById("verify").style.display="none";
+document.getElementById("resp").style.display="none";
+
+document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+el.classList.add("active");
+
+document.getElementById(t).style.display="block";
+}
+
+function code(){
+return "WH-"+Math.floor(100000+Math.random()*900000);
+}
+
+/* INSERIMENTO */
+function send(){
+
+let obj=document.getElementById("obj").value.trim();
+let desc=document.getElementById("desc").value.trim();
+let anon=document.getElementById("anon").value.trim();
+
+if(!obj||!desc||!anon){
+alert("compila tutto");
+return;
+}
+
+let c=code();
+
+reports.push({
+code:c,
+obj:obj,
+desc:desc,
+status:"Ricevuta"
+});
+
+document.getElementById("formBox").style.display="none";
+document.getElementById("success").style.display="block";
+document.getElementById("code").innerText=c;
+}
+
+/* RESET */
+function reset(){
+document.getElementById("success").style.display="none";
+document.getElementById("formBox").style.display="block";
+}
+
+/* VERIFICA */
+function verify(){
+
+let c=document.getElementById("check").value;
+let r=reports.find(x=>x.code===c);
+
+if(r){
+document.getElementById("result").innerHTML="✔ trovata "+r.code;
+document.getElementById("track").style.display="block";
+document.getElementById("status").innerText=r.status;
+}else{
+document.getElementById("result").innerHTML="✖ non trovata";
+document.getElementById("track").style.display="none";
+}
+
+}
+
+/* LOGIN */
+function login(){
+
+if(document.getElementById("u").value==="admin" &&
+document.getElementById("p").value==="1234"){
+
+document.getElementById("login").style.display="none";
+document.getElementById("panel").style.display="block";
+load();
+
+}else alert("no");
+
+}
+
+/* LISTA ADMIN (SENZA DATI SENSIBILI) */
+function load(){
+
+let l=document.getElementById("list");
+l.innerHTML="";
+
+reports.forEach(r=>{
+
+let d=document.createElement("div");
+d.className="report";
+d.innerHTML=`${r.code}<br><span class="badge">${r.status}</span>`;
+
+d.onclick=()=>selected=r;
+
+l.appendChild(d);
+
+});
+
+}
+
+/* CAMBIA STATO */
+function change(){
+
+if(!selected)return;
+
+selected.status=document.getElementById("st").value;
+
+load();
+
+alert("ok");
+
+}
+
+</script>
+
+</body>
+</html>

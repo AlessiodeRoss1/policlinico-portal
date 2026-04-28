@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>Whistleblowing</title>
+
+<style>
+body{font-family:Arial;background:#f4f6f8;padding:20px}
+.box{max-width:700px;margin:auto;background:#fff;padding:20px;border-radius:10px}
+input,textarea,select{width:100%;padding:10px;margin:6px 0}
+button{padding:10px;background:#0b6b4f;color:#fff;border:0;border-radius:6px}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+
+<h2>Whistleblowing System</h2>
+
+<h3>Nuova segnalazione</h3>
+
+<input id="obj" placeholder="Oggetto" required>
+<textarea id="desc" placeholder="Descrizione" required></textarea>
+
+<select id="anonimo" required>
+<option value="">Anonimo?</option>
+<option value="SI">SI</option>
+<option value="NO">NO</option>
+</select>
+
+<input id="email" placeholder="Email (se non anonimo)">
+<input type="file" id="file">
+
+<button onclick="send()">Invia segnalazione</button>
+
+<hr>
+
+<h3>Verifica segnalazione</h3>
+
+<input id="code" placeholder="Codice">
+<button onclick="check()">Verifica</button>
+
+<div id="out"></div>
+
+</div>
+
+<script>
+
+async function send(){
+
+let f = new FormData();
+
+f.append("obj", document.getElementById("obj").value);
+f.append("desc", document.getElementById("desc").value);
+f.append("anonimo", document.getElementById("anonimo").value);
+f.append("email", document.getElementById("email").value);
+
+let file = document.getElementById("file").files[0];
+if(file) f.append("file", file);
+
+try{
+
+let r = await fetch("/api/report", {
+method:"POST",
+body:f
+});
+
+let d = await r.json();
+
+if(d.code){
+alert("Segnalazione creata: " + d.code);
+}else{
+alert("Errore invio segnalazione");
+}
+
+}catch(e){
+alert("Errore rete");
+console.log(e);
+}
+
+}
+
+async function check(){
+
+let r=await fetch("/api/report/"+code.value);
+let d=await r.json();
+
+out.innerHTML = d.error ? "Non trovato" : "Stato: "+d.status;
+
+}
+
+</script>
+
+</body>
+</html>

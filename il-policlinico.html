@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>Il Policlinico</title>
+
+<style>
+body{
+margin:0;
+font-family:Segoe UI, Arial;
+color:#0b2f4f;
+background:#f7f7f7;
+}
+
+/* HEADER */
+.header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:15px 20px;
+background:white;
+border-bottom:1px solid #ddd;
+}
+
+/* LOGO */
+.logo img{
+height:70px;
+}
+
+/* MENU */
+.menu a{
+margin-left:15px;
+text-decoration:none;
+color:#0b2f4f;
+font-weight:bold;
+}
+
+/* BREADCRUMB */
+.breadcrumb{
+max-width:1000px;
+margin:15px auto;
+padding:0 20px;
+font-size:14px;
+color:#666;
+}
+
+.breadcrumb a{
+color:#0b2f4f;
+text-decoration:none;
+font-weight:bold;
+}
+
+/* INTRO */
+.intro{
+max-width:1000px;
+margin:20px auto;
+padding:20px;
+background:white;
+border-radius:10px;
+}
+
+/* BOX GRID */
+.grid{
+max-width:1000px;
+margin:20px auto;
+display:grid;
+grid-template-columns:repeat(2, 1fr);
+gap:20px;
+padding:0 20px;
+}
+
+/* CARD */
+.card{
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 2px 8px rgba(0,0,0,0.08);
+}
+
+.card h3{
+margin-top:0;
+}
+
+/* BUTTON VAI */
+.btn{
+display:inline-block;
+margin-top:15px;
+padding:10px 15px;
+background:#0b2f4f;
+color:white;
+text-decoration:none;
+border-radius:6px;
+font-weight:bold;
+}
+</style>
+
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="logo">
+    <img src="logo-gemelli.png">
+  </div>
+
+  <div class="menu">
+    <a href="index.html">Home</a>
+    <a href="il-policlinico.html">Il Policlinico</a>
+  </div>
+</div>
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb">
+  <a href="index.html">Home</a> / Il Policlinico
+</div>
+
+<!-- INTRO -->
+<div class="intro">
+  <h2>Il Policlinico</h2>
+  <p>
+    La Fondazione Policlinico Universitario Agostino Gemelli IRCCS è il luogo in cui competenze scientifiche e tecniche, sensibilità umana, etica e valori cattolici diventano un impegno al servizio di tutti.
+  </p>
+</div>
+
+<!-- BOX -->
+<div class="grid">
+
+  <div class="card">
+    <h3>Storia e futuro</h3>
+    <p>Il percorso verso l’IRCCS e le sfide di domani.</p>
+    <a class="btn" href="storia-e-futuro.html">VAI</a>
+  </div>
+
+  <div class="card">
+    <h3>Struttura e organizzazione</h3>
+    <p>Organizzazione interna della Fondazione.</p>
+    <a class="btn" href="struttura-e-organizzazione.html">VAI</a>
+  </div>
+
+  <div class="card">
+    <h3>Whistleblowing</h3>
+    <p>Segnalazioni di condotte non conformi.</p>
+    <a class="btn" href="whistleblowing.html">VAI</a>
+  </div>
+
+  <div class="card">
+    <h3>Parità di genere</h3>
+    <p>Impegni e politiche di inclusione.</p>
+    <a class="btn" href="parita-di-genere.html">VAI</a>
+  </div>
+
+</div>
+
+</body>
+</html>
