@@ -5,44 +5,70 @@
 <title>Whistleblowing</title>
 
 <style>
-body{margin:0;font-family:Segoe UI;}
+body{
+margin:0;
+font-family:Segoe UI, Arial;
+background:#0f172a;
+}
 
-.wrapper{display:flex;height:100vh;}
-
-/* SINISTRA */
-.left{
-width:50%;
+/* SPLIT */
+.wrapper{
 display:flex;
-align-items:center;
+height:100vh;
+}
+
+/* SINISTRA (BRAND CLEAN) */
+.left{
+flex:1;
+display:flex;
+flex-direction:column;
 justify-content:center;
-background:#fff;
+align-items:center;
+background:#0f172a;
+color:white;
+padding:40px;
+text-align:center;
 }
 
 .left img{
-width:280px;
+width:180px;
+margin-bottom:20px;
+}
+
+.left h1{
+font-size:28px;
+margin:10px 0;
+}
+
+.left p{
+opacity:0.8;
+max-width:300px;
+font-size:14px;
 }
 
 /* DESTRA */
 .right{
-width:50%;
+flex:1.2;
 display:flex;
 align-items:center;
 justify-content:center;
-background:#4f5c63;
+background:#f1f5f9;
+padding:20px;
 }
 
 /* CARD */
 .card{
 width:520px;
-background:#fff;
+background:white;
+border-radius:16px;
 padding:25px;
-border-radius:10px;
+box-shadow:0 20px 60px rgba(0,0,0,0.15);
 }
 
 /* TABS */
 .tabs{
 display:flex;
-border-bottom:1px solid #ddd;
+gap:10px;
 margin-bottom:20px;
 }
 
@@ -50,14 +76,17 @@ margin-bottom:20px;
 flex:1;
 text-align:center;
 padding:10px;
+border-radius:10px;
 cursor:pointer;
-color:#1a73e8;
+font-size:13px;
+background:#e2e8f0;
+color:#334155;
+transition:0.2s;
 }
 
 .tab.active{
-color:#0b6b4f;
-font-weight:600;
-border-bottom:2px solid #0b6b4f;
+background:#0b6b4f;
+color:white;
 }
 
 /* INPUT */
@@ -65,36 +94,57 @@ input,textarea,select{
 width:100%;
 padding:10px;
 margin-top:10px;
-border:1px solid #ccc;
-border-radius:6px;
+border-radius:10px;
+border:1px solid #cbd5e1;
+outline:none;
+}
+
+textarea{
+height:110px;
+resize:none;
 }
 
 /* BUTTON */
 button{
+width:100%;
 margin-top:10px;
-padding:10px 15px;
+padding:10px;
 border:none;
-border-radius:5px;
+border-radius:10px;
 cursor:pointer;
+font-weight:600;
 }
 
-.btn-green{background:#0b6b4f;color:#fff;}
-.btn-grey{background:#666;color:#fff;}
+.btn{
+background:#0b6b4f;
+color:white;
+}
+
+.btn:hover{
+background:#09543d;
+}
+
+/* BOX RESULT */
+.result{
+margin-top:10px;
+font-size:14px;
+}
 
 /* REPORT */
 .report{
-border:1px solid #ddd;
-margin-top:10px;
 padding:10px;
-border-radius:6px;
+border:1px solid #e2e8f0;
+border-radius:10px;
+margin-top:10px;
 cursor:pointer;
+background:#f8fafc;
 }
 
-.badge{
-font-size:12px;
-background:#eee;
-padding:3px 8px;
-border-radius:5px;
+/* STATUS */
+.status{
+margin-top:10px;
+font-size:13px;
+color:#334155;
 }
 </style>
 
@@ -107,6 +157,8 @@ border-radius:5px;
 <!-- SINISTRA -->
 <div class="left">
 <img src="logo-gemelli.png">
+<h1>Whistleblowing System</h1>
+<p>Sistema sicuro e anonimo per la gestione delle segnalazioni interne del Policlinico.</p>
 </div>
 
 <!-- DESTRA -->
@@ -116,62 +168,44 @@ border-radius:5px;
 
 <!-- TABS -->
 <div class="tabs">
-<div class="tab active" onclick="showTab('insert',this)">INSERISCI</div>
-<div class="tab" onclick="showTab('verify',this)">VERIFICA</div>
-<div class="tab" onclick="showTab('resp',this)">RESPONSABILI</div>
+<div class="tab active" onclick="show('ins',this)">Inserisci</div>
+<div class="tab" onclick="show('ver',this)">Verifica</div>
+<div class="tab" onclick="show('adm',this)">Responsabili</div>
 </div>
 
 <!-- INSERISCI -->
-<div id="insert">
+<div id="ins">
 
-<div id="formBox">
-
-<input id="obj" placeholder="Oggetto segnalazione">
-<textarea id="desc" placeholder="Descrizione"></textarea>
+<input id="obj" placeholder="Oggetto">
+<textarea id="desc" placeholder="Descrizione segnalazione"></textarea>
 <input id="anon" placeholder="Anonimo SI / NO">
 
-<button class="btn-green" onclick="send()">INVIA</button>
+<button class="btn" onclick="send()">Invia segnalazione</button>
 
-</div>
-
-<div id="success" style="display:none;text-align:center">
-<h3>Segnalazione inviata</h3>
-<div id="code"></div>
-<button class="btn-green" onclick="reset()">OK</button>
-</div>
+<div class="result" id="out1"></div>
 
 </div>
 
 <!-- VERIFICA -->
-<div id="verify" style="display:none">
+<div id="ver" style="display:none">
 
-<input id="check" placeholder="Codice segnalazione">
+<input id="code" placeholder="Codice WH-XXXXXX">
+<button class="btn" onclick="check()">Verifica</button>
 
-<button class="btn-green" onclick="verify()">VERIFICA</button>
-
-<div id="result"></div>
-
-<div id="track" style="display:none;margin-top:20px">
-<b>Stato:</b> <span id="status"></span>
-</div>
+<div id="out2"></div>
 
 </div>
 
-<!-- RESPONSABILI -->
-<div id="resp" style="display:none">
+<!-- ADMIN -->
+<div id="adm" style="display:none">
 
-<div id="login">
 <input id="u" placeholder="user">
-<input id="p" type="password" placeholder="pass">
-<button class="btn-green" onclick="login()">ENTRA</button>
-</div>
+<input id="p" type="password" placeholder="password">
+<button class="btn" onclick="login()">Accedi</button>
 
-<div id="panel" style="display:none">
+<div id="panel" style="display:none;margin-top:15px">
 
-<h4>Segnalazioni</h4>
 <div id="list"></div>
-
-<h4>Cambia stato</h4>
 
 <select id="st">
 <option>Ricevuta</option>
@@ -180,7 +214,9 @@ border-radius:5px;
 <option>Chiusa</option>
 </select>
 
-<button class="btn-green" onclick="change()">Aggiorna</button>
+<button class="btn" onclick="update()">Aggiorna stato</button>
+
+</div>
 
 </div>
 
@@ -192,92 +228,69 @@ border-radius:5px;
 
 <script>
 
-/* ====== SIMULAZIONE TEMPORANEA ====== */
-/* (poi lo colleghiamo al server vero) */
-
 let reports=[];
 let selected=null;
 
-function showTab(t,el){
+function show(t,el){
 
-document.getElementById("insert").style.display="none";
-document.getElementById("verify").style.display="none";
-document.getElementById("resp").style.display="none";
-
+["ins","ver","adm"].forEach(x=>document.getElementById(x).style.display="none");
 document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
-el.classList.add("active");
 
 document.getElementById(t).style.display="block";
+el.classList.add("active");
+
 }
 
 function code(){
 return "WH-"+Math.floor(100000+Math.random()*900000);
 }
 
-/* INSERIMENTO */
+/* SEND */
 function send(){
 
-let obj=document.getElementById("obj").value.trim();
-let desc=document.getElementById("desc").value.trim();
-let anon=document.getElementById("anon").value.trim();
-
-if(!obj||!desc||!anon){
-alert("compila tutto");
-return;
-}
+let obj=document.getElementById("obj").value;
+let desc=document.getElementById("desc").value;
+let anon=document.getElementById("anon").value;
 
 let c=code();
 
 reports.push({
 code:c,
-obj:obj,
-desc:desc,
+obj,
+desc,
 status:"Ricevuta"
 });
 
-document.getElementById("formBox").style.display="none";
-document.getElementById("success").style.display="block";
-document.getElementById("code").innerText=c;
+document.getElementById("out1").innerHTML="Codice: <b>"+c+"</b>";
 }
 
-/* RESET */
-function reset(){
-document.getElementById("success").style.display="none";
-document.getElementById("formBox").style.display="block";
-}
+/* CHECK */
+function check(){
 
-/* VERIFICA */
-function verify(){
-
-let c=document.getElementById("check").value;
+let c=document.getElementById("code").value;
 let r=reports.find(x=>x.code===c);
 
-if(r){
-document.getElementById("result").innerHTML="✔ trovata "+r.code;
-document.getElementById("track").style.display="block";
-document.getElementById("status").innerText=r.status;
-}else{
-document.getElementById("result").innerHTML="✖ non trovata";
-document.getElementById("track").style.display="none";
+if(!r){
+document.getElementById("out2").innerHTML="Non trovata";
+return;
 }
+
+document.getElementById("out2").innerHTML=
+"✔ "+r.code+"<br><div class='status'>Stato: "+r.status+"</div>";
 
 }
 
 /* LOGIN */
 function login(){
 
-if(document.getElementById("u").value==="admin" &&
-document.getElementById("p").value==="1234"){
-
-document.getElementById("login").style.display="none";
+if(u.value==="admin" && p.value==="1234"){
 document.getElementById("panel").style.display="block";
 load();
-
-}else alert("no");
+}else alert("err");
 
 }
 
-/* LISTA */
+/* LOAD */
 function load(){
 
 let l=document.getElementById("list");
@@ -287,8 +300,7 @@ reports.forEach(r=>{
 
 let d=document.createElement("div");
 d.className="report";
-
-d.innerHTML=`${r.code}<br><span class="badge">${r.status}</span>`;
+d.innerHTML=r.code+" - "+r.status;
 
 d.onclick=()=>selected=r;
 
@@ -298,16 +310,13 @@ l.appendChild(d);
 
 }
 
-/* CAMBIO STATO */
-function change(){
+/* UPDATE */
+function update(){
 
 if(!selected)return;
 
 selected.status=document.getElementById("st").value;
-
 load();
-
-alert("aggiornato");
 
 }
 
