@@ -5,12 +5,20 @@ const app = express();
 
 app.use(express.json());
 
-/* 🔥 SERVE ESATTAMENTE LA CARTELLA CORRETTA */
-app.use(express.static(path.join(__dirname, "whistleblowing")));
+/* 🔥 QUESTO È IL PUNTO CHIAVE */
+const publicPath = path.join(__dirname, "whistleblowing");
 
-/* 🔥 FORZA LA ROOT "/" */
+/* serve file statici */
+app.use(express.static(publicPath));
+
+/* 🔥 FORZA LA ROOT */
 app.get("/", (req, res) => {
-res.sendFile(path.join(__dirname, "whistleblowing", "index.html"));
+res.sendFile(path.join(publicPath, "index.html"));
+});
+
+/* TEST DI VERIFICA */
+app.get("/health", (req, res) => {
+res.send("OK");
 });
 
 const PORT = process.env.PORT || 3000;
