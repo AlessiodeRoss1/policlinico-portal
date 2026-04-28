@@ -31,6 +31,7 @@ input, select, textarea, button{
   margin-bottom:10px;
   border-radius:6px;
   border:1px solid #ccc;
+  box-sizing:border-box;
 }
 
 button{
@@ -43,6 +44,11 @@ button{
 button:hover{
   background:#095a42;
 }
+
+.status{
+  font-weight:bold;
+  color:#0b6b4f;
+}
 </style>
 </head>
 
@@ -50,9 +56,9 @@ button:hover{
 
 <h2>Whistleblowing System</h2>
 
-<!-- ================= NUOVA SEGNALAZIONE ================= -->
+<!-- ================= INSERISCI ================= -->
 <div class="box">
-  <h3>Nuova segnalazione</h3>
+  <h3>Inserisci segnalazione</h3>
 
   <input id="obj" placeholder="Oggetto">
 
@@ -82,7 +88,7 @@ button:hover{
 <div class="box">
   <h3>Verifica segnalazione</h3>
 
-  <input id="code" placeholder="Codice segnalazione">
+  <input id="code" placeholder="Inserisci codice (es. WH-XXXXXX)">
   <button onclick="check()">Verifica</button>
 
   <div id="out"></div>
@@ -90,6 +96,7 @@ button:hover{
 
 <script>
 
+// ---------------- INVIO ----------------
 async function send(){
 
   let obj = document.getElementById("obj").value;
@@ -108,6 +115,7 @@ async function send(){
     "✔ Segnalazione inviata<br><b>Codice:</b> " + data.code;
 }
 
+// ---------------- VERIFICA ----------------
 async function check(){
 
   let code = document.getElementById("code").value;
@@ -116,16 +124,22 @@ async function check(){
   let data = await res.json();
 
   if(data.error){
-    document.getElementById("out").innerHTML = "❌ Segnalazione non trovata";
+    document.getElementById("out").innerHTML =
+      "<div class='box'>❌ Segnalazione non trovata</div>";
     return;
   }
 
   document.getElementById("out").innerHTML = `
-    <b>Codice:</b> ${data.code}<br>
-    <b>Oggetto:</b> ${data.obj}<br>
-    <b>Categoria:</b> ${data.category}<br>
-    <b>Descrizione:</b> ${data.desc}<br>
-    <b><u>Stato:</u></b> ${data.status}
+    <div class="box">
+      <h3>✔ Segnalazione trovata</h3>
+
+      <p><b>Codice:</b> ${data.code}</p>
+      <p><b>Oggetto:</b> ${data.obj}</p>
+      <p><b>Categoria:</b> ${data.category || "-"}</p>
+      <p><b>Descrizione:</b> ${data.desc || "-"}</p>
+
+      <p class="status"><b>Stato:</b> ${data.status}</p>
+    </div>
   `;
 }
 
