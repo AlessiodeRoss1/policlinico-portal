@@ -2,21 +2,28 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<title>Policlinico</title>
+<title>Il Policlinico</title>
 
 <style>
 body{
 margin:0;
-font-family:Segoe UI;
-background:#f4f6f8;
+font-family:Segoe UI, Arial;
+color:#0b2f4f;
+background:#f7f7f7;
 }
 
+/* HEADER */
 .header{
-padding:20px;
-background:white;
 display:flex;
 justify-content:space-between;
 align-items:center;
+padding:15px 20px;
+background:white;
+border-bottom:1px solid #ddd;
+}
+
+.logo img{
+height:70px;
 }
 
 .menu a{
@@ -26,22 +33,41 @@ color:#0b2f4f;
 font-weight:bold;
 }
 
-.container{
-max-width:900px;
-margin:40px auto;
+/* INTRO */
+.intro{
+max-width:1000px;
+margin:20px auto;
 padding:20px;
 background:white;
 border-radius:10px;
+}
+
+/* GRID */
+.grid{
+max-width:1000px;
+margin:20px auto;
+display:grid;
+grid-template-columns:repeat(2, 1fr);
+gap:20px;
+padding:0 20px;
+}
+
+.card{
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 2px 8px rgba(0,0,0,0.08);
 }
 
 .btn{
 display:inline-block;
 margin-top:15px;
 padding:10px 15px;
-background:#0b6b4f;
+background:#0b2f4f;
 color:white;
 text-decoration:none;
 border-radius:6px;
+font-weight:bold;
 }
 </style>
 
@@ -49,19 +75,49 @@ border-radius:6px;
 
 <body>
 
+<!-- HEADER -->
 <div class="header">
-<h3>Policlinico</h3>
-<div class="menu">
-<a href="/il-policlinico">Il Policlinico</a>
-<a href="/whistleblowing">Whistleblowing</a>
-</div>
+  <div class="logo">
+    <img src="logo-gemelli.png">
+  </div>
+
+  <div class="menu">
+    <a href="/">Home</a>
+    <a href="/whistleblowing">Whistleblowing</a>
+  </div>
 </div>
 
-<div class="container">
-<h1>Benvenuto</h1>
-<p>Sistema ospedaliero digitale.</p>
+<!-- INTRO -->
+<div class="intro">
+  <h2>Il Policlinico</h2>
+  <p>
+    Fondazione Policlinico Universitario Agostino Gemelli IRCCS.
+  </p>
+</div>
 
-<a class="btn" href="/whistleblowing">Accedi Whistleblowing</a>
+<!-- GRID -->
+<div class="grid">
+
+  <div class="card">
+    <h3>Storia e futuro</h3>
+    <a class="btn" href="storia-e-futuro.html">VAI</a>
+  </div>
+
+  <div class="card">
+    <h3>Struttura e organizzazione</h3>
+    <a class="btn" href="struttura-e-organizzazione.html">VAI</a>
+  </div>
+
+  <div class="card">
+    <h3>Whistleblowing</h3>
+    <a class="btn" href="/whistleblowing">VAI</a>
+  </div>
+
+  <div class="card">
+    <h3>Responsabile</h3>
+    <a class="btn" href="responsabile.html">VAI</a>
+  </div>
+
 </div>
 
 </body>
