@@ -2,95 +2,120 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<title>Il Policlinico</title>
+<title>Whistleblowing</title>
 
 <style>
 body{
 margin:0;
 font-family:Segoe UI, Arial;
+background:#eef2f5;
 color:#0b2f4f;
-background:#f7f7f7;
 }
 
-/* HEADER */
-.header{
+/* HEADER SEMPLICE */
+header{
+background:white;
+padding:15px 25px;
+border-bottom:1px solid #ddd;
+font-weight:bold;
+}
+
+/* CONTAINER DUE COLONNE */
+.container{
+display:flex;
+gap:20px;
+max-width:1100px;
+margin:30px auto;
+padding:0 20px;
+}
+
+/* BOX */
+.box{
+flex:1;
+background:white;
+padding:20px;
+border-radius:12px;
+box-shadow:0 5px 15px rgba(0,0,0,0.08);
+}
+
+/* TITOLI */
+h2{
+margin-top:0;
+color:#0b6b4f;
+}
+
+/* INPUT */
+input, select, textarea, button{
+width:100%;
+padding:10px;
+margin-top:10px;
+border-radius:6px;
+border:1px solid #ccc;
+font-family:inherit;
+}
+
+textarea{
+resize:none;
+height:120px;
+}
+
+/* BUTTON */
+button{
+background:#0b6b4f;
+color:white;
+border:none;
+cursor:pointer;
+font-weight:bold;
+}
+
+button:hover{
+background:#09543d;
+}
+
+/* RISULTATO */
+.result{
+margin-top:10px;
+font-weight:bold;
+color:#0b2f4f;
+}
+
+/* VERIFICA BOX */
+.report{
+margin-top:15px;
+padding:15px;
+border-radius:10px;
+background:#f7f9fb;
+border:1px solid #ddd;
+}
+
+/* STATUS LINE */
+.status{
+margin-top:15px;
 display:flex;
 justify-content:space-between;
-align-items:center;
-padding:15px 20px;
-background:white;
-border-bottom:1px solid #ddd;
+font-size:12px;
 }
 
-/* LOGO */
-.logo img{
-height:70px;
+.step{
+text-align:center;
+flex:1;
+position:relative;
 }
 
-/* MENU */
-.menu a{
-margin-left:15px;
-text-decoration:none;
-color:#0b2f4f;
-font-weight:bold;
+.circle{
+width:14px;
+height:14px;
+border-radius:50%;
+background:#ccc;
+margin:auto;
 }
 
-/* BREADCRUMB */
-.breadcrumb{
-max-width:1000px;
-margin:15px auto;
-padding:0 20px;
-font-size:14px;
-color:#666;
+.active .circle{
+background:#0b6b4f;
 }
 
-.breadcrumb a{
-color:#0b2f4f;
-text-decoration:none;
-font-weight:bold;
-}
-
-/* INTRO */
-.intro{
-max-width:1000px;
-margin:20px auto;
-padding:20px;
-background:white;
-border-radius:10px;
-}
-
-/* BOX GRID */
-.grid{
-max-width:1000px;
-margin:20px auto;
-display:grid;
-grid-template-columns:repeat(2, 1fr);
-gap:20px;
-padding:0 20px;
-}
-
-/* CARD */
-.card{
-background:white;
-padding:20px;
-border-radius:10px;
-box-shadow:0 2px 8px rgba(0,0,0,0.08);
-}
-
-.card h3{
-margin-top:0;
-}
-
-/* BUTTON VAI */
-.btn{
-display:inline-block;
-margin-top:15px;
-padding:10px 15px;
-background:#0b2f4f;
-color:white;
-text-decoration:none;
-border-radius:6px;
-font-weight:bold;
+.label{
+margin-top:5px;
 }
 </style>
 
@@ -98,59 +123,109 @@ font-weight:bold;
 
 <body>
 
-<!-- HEADER -->
-<div class="header">
-  <div class="logo">
-    <img src="logo-gemelli.png">
-  </div>
+<header>
+Whistleblowing System
+</header>
 
-  <div class="menu">
-    <a href="index.html">Home</a>
-    <a href="il-policlinico.html">Il Policlinico</a>
-  </div>
+<div class="container">
+
+<!-- COLONNA SINISTRA: INSERIMENTO -->
+<div class="box">
+<h2>Inserisci segnalazione</h2>
+
+<input id="obj" placeholder="Oggetto">
+
+<select id="category">
+<option>Corruzione</option>
+<option>Abuso</option>
+<option>Sicurezza</option>
+<option>Altro</option>
+</select>
+
+<textarea id="desc" placeholder="Descrizione dettagliata"></textarea>
+
+<button onclick="send()">Invia segnalazione</button>
+
+<div class="result" id="result"></div>
 </div>
 
-<!-- BREADCRUMB -->
-<div class="breadcrumb">
-  <a href="index.html">Home</a> / Il Policlinico
+<!-- COLONNA DESTRA: VERIFICA -->
+<div class="box">
+<h2>Verifica segnalazione</h2>
+
+<input id="code" placeholder="Codice (es. WH-123456)">
+<button onclick="check()">Verifica stato</button>
+
+<div id="out"></div>
 </div>
 
-<!-- INTRO -->
-<div class="intro">
-  <h2>Il Policlinico</h2>
-  <p>
-    La Fondazione Policlinico Universitario Agostino Gemelli IRCCS è il luogo in cui competenze scientifiche e tecniche, sensibilità umana, etica e valori cattolici diventano un impegno al servizio di tutti.
-  </p>
 </div>
 
-<!-- BOX -->
-<div class="grid">
+<script>
 
-  <div class="card">
-    <h3>Storia e futuro</h3>
-    <p>Il percorso verso l’IRCCS e le sfide di domani.</p>
-    <a class="btn" href="storia-e-futuro.html">VAI</a>
-  </div>
+function renderStatus(status){
 
-  <div class="card">
-    <h3>Struttura e organizzazione</h3>
-    <p>Organizzazione interna della Fondazione.</p>
-    <a class="btn" href="struttura-e-organizzazione.html">VAI</a>
-  </div>
+const steps=["Ricevuta","In verifica","In lavorazione","Chiusa"];
+let current=steps.indexOf(status);
 
-  <div class="card">
-    <h3>Whistleblowing</h3>
-    <p>Segnalazioni di condotte non conformi.</p>
-    <a class="btn" href="whistleblowing/index.html">VAI</a>
-  </div>
+return `
+<div class="status">
+${steps.map((s,i)=>`
+<div class="step ${i<=current?'active':''}">
+<div class="circle"></div>
+<div class="label">${s}</div>
+</div>
+`).join("")}
+</div>
+`;
 
-  <div class="card">
-    <h3>Parità di genere</h3>
-    <p>Impegni e politiche di inclusione.</p>
-    <a class="btn" href="parita-di-genere.html">VAI</a>
-  </div>
+}
+
+async function send(){
+
+let obj=document.getElementById("obj").value;
+let category=document.getElementById("category").value;
+let desc=document.getElementById("desc").value;
+
+let res=await fetch("/api/segnalazione",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({obj,category,desc})
+});
+
+let data=await res.json();
+
+document.getElementById("result").innerHTML=
+"Codice assegnato: <b>"+data.code+"</b>";
+}
+
+async function check(){
+
+let code=document.getElementById("code").value;
+
+let res=await fetch("/api/verifica/"+code);
+let data=await res.json();
+
+if(data.error){
+document.getElementById("out").innerHTML="Segnalazione non trovata";
+return;
+}
+
+document.getElementById("out").innerHTML=`
+<div class="report">
+<b>Codice:</b> ${data.code}<br>
+<b>Oggetto:</b> ${data.obj}<br>
+<b>Categoria:</b> ${data.category}<br>
+<b>Stato:</b> ${data.status}
+
+${renderStatus(data.status)}
 
 </div>
+`;
+
+}
+
+</script>
 
 </body>
 </html>
