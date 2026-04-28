@@ -1,8 +1,12 @@
 const express = require("express");
+const path = require("path");
 const nodemailer = require("nodemailer");
 
 const app = express();
+
 app.use(express.json());
+app.use(express.static(path.join(__dirname, "whistleblowing"))); 
+// 👆 IMPORTANTISSIMO: serve index.html automaticamente
 
 let reports=[];
 
@@ -19,10 +23,10 @@ pass:"wxdy rwnu nixn iexs"
 }
 });
 
-/* INSERIMENTO */
+/* API INSERIMENTO */
 app.post("/api/segnalazione",(req,res)=>{
 
-let c = code();
+let c=code();
 
 let r={
 code:c,
@@ -35,7 +39,6 @@ status:"Ricevuta"
 
 reports.push(r);
 
-/* EMAIL */
 transporter.sendMail({
 from:"Whistleblowing <policlinicogemellirrp@gmail.com>",
 to:req.body.email,
@@ -54,21 +57,6 @@ let r=reports.find(x=>x.code===req.params.code);
 if(!r) return res.json({error:true});
 
 res.json(r);
-
-});
-
-/* LISTA ADMIN */
-app.get("/api/list",(req,res)=>{
-res.json(reports);
-});
-
-/* UPDATE STATO */
-app.post("/api/update",(req,res)=>{
-
-let r=reports.find(x=>x.code===req.body.code);
-if(r) r.status=req.body.status;
-
-res.json({ok:true});
 
 });
 
