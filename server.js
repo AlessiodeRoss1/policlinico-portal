@@ -11,9 +11,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname));
 
-// DATABASE
+// DB
 const db = new sqlite3.Database("db.sqlite");
 
+/* =========================
+   WHISTLEBLOWING TABLE
+========================= */
 db.run(`
 CREATE TABLE IF NOT EXISTS reports (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -25,22 +28,41 @@ CREATE TABLE IF NOT EXISTS reports (
 )
 `);
 
-// ---------------- HOME ----------------
+/* =========================
+   PATIENTS TABLE
+========================= */
+db.run(`
+CREATE TABLE IF NOT EXISTS patients (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name TEXT,
+  surname TEXT,
+  cf TEXT,
+  birthdate TEXT
+)
+`);
+
+/* =========================
+   HOME PAGES
+========================= */
 app.get("/", (req, res) => {
   res.sendFile(__dirname + "/index.html");
 });
 
-// ---------------- WHISTLEBLOWING ----------------
 app.get("/whistleblowing", (req, res) => {
   res.sendFile(__dirname + "/whistleblowing/index.html");
 });
 
-// ---------------- RESPONSABILE ----------------
+app.get("/pazienti", (req, res) => {
+  res.sendFile(__dirname + "/pazienti/index.html");
+});
+
 app.get("/responsabile", (req, res) => {
   res.sendFile(__dirname + "/responsabile.html");
 });
 
-// ---------------- INVIO SEGNALAZIONE ----------------
+/* =========================
+   WHISTLEBLOWING API
+========================= */
 app.post("/api/segnalazione", (req, res) => {
   const { obj, desc, category } = req.body;
 
@@ -54,7 +76,6 @@ app.post("/api/segnalazione", (req, res) => {
   res.json({ ok: true, code });
 });
 
-// ---------------- VERIFICA ----------------
 app.get("/api/verifica/:code", (req, res) => {
   db.get(
     "SELECT * FROM reports WHERE code = ?",
@@ -66,14 +87,12 @@ app.get("/api/verifica/:code", (req, res) => {
   );
 });
 
-// ---------------- LISTA RESPONSABILE ----------------
 app.get("/api/reports", (req, res) => {
   db.all("SELECT * FROM reports", (err, rows) => {
     res.json(rows);
   });
 });
 
-// ---------------- AGGIORNA STATO ----------------
 app.post("/api/status", (req, res) => {
   const { code, status } = req.body;
 
@@ -85,7 +104,29 @@ app.post("/api/status", (req, res) => {
   res.json({ ok: true });
 });
 
-// ---------------- START ----------------
+/* =========================
+   PAZIENTI API
+========================= */
+app.post("/api/pazienti", (req, res) => {
+  const { name, surname, cf, birthdate } = req.body;
+
+  db.run(
+    "INSERT INTO patients (name, surname, cf, birthdate) VALUES (?, ?, ?, ?)",
+    [name, surname, cf, birthdate]
+  );
+
+  res.json({ ok: true });
+});
+
+app.get("/api/pazienti", (req, res) => {
+  db.all("SELECT * FROM patients", (err, rows) => {
+    res.json(rows);
+  });
+});
+
+/* =========================
+   START SERVER
+========================= */
 app.listen(PORT, () => {
   console.log("Server attivo su porta " + PORT);
 });

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>Pazienti</title>
+</head>
+
+<body>
+
+<h2>Gestione Pazienti</h2>
+
+<input id="name" placeholder="Nome">
+<input id="surname" placeholder="Cognome">
+<input id="cf" placeholder="Codice Fiscale">
+<input id="birth" type="date">
+
+<button onclick="add()">Aggiungi</button>
+
+<hr>
+
+<button onclick="load()">Carica pazienti</button>
+
+<div id="list"></div>
+
+<script>
+
+async function add(){
+await fetch("/api/pazienti",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({
+name:document.getElementById("name").value,
+surname:document.getElementById("surname").value,
+cf:document.getElementById("cf").value,
+birthdate:document.getElementById("birth").value
+})
+});
+
+alert("Paziente aggiunto");
+}
+
+async function load(){
+let res=await fetch("/api/pazienti");
+let data=await res.json();
+
+document.getElementById("list").innerHTML =
+data.map(p=>`
+<p>
+<b>${p.name} ${p.surname}</b><br>
+CF: ${p.cf}<br>
+Nascita: ${p.birthdate}
+</p>
+`).join("");
+}
+
+</script>
+
+</body>
+</html>

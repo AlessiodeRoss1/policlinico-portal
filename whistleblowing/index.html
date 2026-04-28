@@ -7,19 +7,26 @@
 <style>
 body{
   font-family: Arial;
-  background:#f4f6f8;
+  background:#eef2f5;
   margin:0;
   padding:20px;
 }
 
-h2{ margin-top:0; }
+.container{
+  max-width:800px;
+  margin:auto;
+}
 
 .box{
   background:white;
-  padding:15px;
-  border-radius:10px;
-  box-shadow:0 5px 15px rgba(0,0,0,0.1);
+  padding:20px;
   margin-bottom:20px;
+  border-radius:12px;
+  box-shadow:0 5px 20px rgba(0,0,0,0.1);
+}
+
+h2{
+  color:#0b6b4f;
 }
 
 input, select, textarea, button{
@@ -28,7 +35,6 @@ input, select, textarea, button{
   margin:8px 0;
   border-radius:6px;
   border:1px solid #ccc;
-  box-sizing:border-box;
 }
 
 button{
@@ -38,99 +44,151 @@ button{
   cursor:pointer;
 }
 
-button:hover{
-  background:#095a42;
+.status-bar{
+  display:flex;
+  justify-content:space-between;
+  margin-top:15px;
 }
 
-.status{
-  font-weight:bold;
-  color:#0b6b4f;
+.step{
+  flex:1;
+  text-align:center;
+  position:relative;
+}
+
+.step::before{
+  content:"";
+  height:6px;
+  background:#ccc;
+  position:absolute;
+  top:10px;
+  left:-50%;
+  width:100%;
+  z-index:0;
+}
+
+.step:first-child::before{
+  display:none;
+}
+
+.circle{
+  width:20px;
+  height:20px;
+  border-radius:50%;
+  background:#ccc;
+  margin:auto;
+  position:relative;
+  z-index:1;
+}
+
+.active .circle{
+  background:#0b6b4f;
+}
+
+.label{
+  font-size:12px;
+  margin-top:5px;
 }
 </style>
 </head>
 
 <body>
 
-<h2>Whistleblowing System</h2>
+<div class="container">
 
-<!-- ================= INSERISCI ================= -->
+<h2>Whistleblowing</h2>
+
 <div class="box">
-  <h3>Inserisci segnalazione</h3>
+<h3>Inserisci segnalazione</h3>
 
-  <input id="obj" placeholder="Oggetto">
+<input id="obj" placeholder="Oggetto">
 
-  <select id="category">
-    <option value="">Categoria</option>
-    <option>Corruzione</option>
-    <option>Abuso</option>
-    <option>Sicurezza</option>
-    <option>Altro</option>
-  </select>
+<select id="category">
+<option>Corruzione</option>
+<option>Abuso</option>
+<option>Sicurezza</option>
+<option>Altro</option>
+</select>
 
-  <textarea id="desc" placeholder="Descrizione"></textarea>
+<textarea id="desc" placeholder="Descrizione"></textarea>
 
-  <button onclick="send()">Invia segnalazione</button>
+<button onclick="send()">Invia</button>
 
-  <p id="result"></p>
+<p id="result"></p>
 </div>
 
-<!-- ================= VERIFICA ================= -->
 <div class="box">
-  <h3>Verifica segnalazione</h3>
+<h3>Verifica segnalazione</h3>
 
-  <input id="code" placeholder="Inserisci codice (WH-XXXXXX)">
-  <button onclick="check()">Verifica</button>
+<input id="code" placeholder="Codice segnalazione">
+<button onclick="check()">Verifica</button>
 
-  <div id="out"></div>
+<div id="out"></div>
+</div>
+
 </div>
 
 <script>
 
-// ---------------- INVIO ----------------
-async function send(){
-
-  let obj = document.getElementById("obj").value;
-  let category = document.getElementById("category").value;
-  let desc = document.getElementById("desc").value;
-
-  let res = await fetch("/api/segnalazione", {
-    method: "POST",
-    headers: {"Content-Type":"application/json"},
-    body: JSON.stringify({ obj, category, desc })
-  });
-
-  let data = await res.json();
-
-  document.getElementById("result").innerHTML =
-    "✔ Segnalazione inviata<br><b>Codice:</b> " + data.code;
+function getStep(status){
+  const steps = ["Ricevuta","In verifica","In lavorazione","Chiusa"];
+  return steps.indexOf(status);
 }
 
-// ---------------- VERIFICA ----------------
-async function check(){
+function renderStatus(status){
+  const steps = ["Ricevuta","In verifica","In lavorazione","Chiusa"];
+  let current = getStep(status);
 
-  let code = document.getElementById("code").value;
-
-  let res = await fetch("/api/verifica/" + code);
-  let data = await res.json();
-
-  if(data.error){
-    document.getElementById("out").innerHTML =
-      "<div class='box'>❌ Segnalazione non trovata</div>";
-    return;
-  }
-
-  document.getElementById("out").innerHTML = `
-    <div class="box">
-      <h3>✔ Segnalazione trovata</h3>
-
-      <p><b>Codice:</b> ${data.code}</p>
-      <p><b>Oggetto:</b> ${data.obj}</p>
-      <p><b>Categoria:</b> ${data.category || "-"}</p>
-      <p><b>Descrizione:</b> ${data.desc || "-"}</p>
-
-      <p class="status"><b>Stato:</b> ${data.status}</p>
-    </div>
+  return `
+  <div class="status-bar">
+    ${steps.map((s,i)=>`
+      <div class="step ${i<=current?'active':''}">
+        <div class="circle"></div>
+        <div class="label">${s}</div>
+      </div>
+    `).join("")}
+  </div>
   `;
+}
+
+async function send(){
+let obj=document.getElementById("obj").value;
+let category=document.getElementById("category").value;
+let desc=document.getElementById("desc").value;
+
+let res=await fetch("/api/segnalazione",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({obj,category,desc})
+});
+
+let data=await res.json();
+
+document.getElementById("result").innerHTML="Codice segnalazione: <b>"+data.code+"</b>";
+}
+
+async function check(){
+let code=document.getElementById("code").value;
+
+let res=await fetch("/api/verifica/"+code);
+let data=await res.json();
+
+if(data.error){
+document.getElementById("out").innerHTML="Non trovata";
+return;
+}
+
+document.getElementById("out").innerHTML=`
+<div class="box">
+<b>Codice:</b> ${data.code}<br>
+<b>Oggetto:</b> ${data.obj}<br>
+<b>Categoria:</b> ${data.category}<br>
+<b>Stato:</b> ${data.status}
+
+${renderStatus(data.status)}
+
+</div>
+`;
 }
 
 </script>
