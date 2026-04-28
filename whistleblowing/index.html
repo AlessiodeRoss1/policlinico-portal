@@ -5,190 +5,310 @@
 <title>Whistleblowing</title>
 
 <style>
-body{
-  font-family: Arial;
-  background:#eef2f5;
-  margin:0;
-  padding:20px;
+body{margin:0;font-family:Segoe UI;}
+
+.wrapper{display:flex;height:100vh;}
+
+/* SINISTRA */
+.left{
+width:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+background:#fff;
 }
 
-.container{
-  max-width:800px;
-  margin:auto;
+.left img{
+width:280px;
 }
 
-.box{
-  background:white;
-  padding:20px;
-  margin-bottom:20px;
-  border-radius:12px;
-  box-shadow:0 5px 20px rgba(0,0,0,0.1);
+/* DESTRA */
+.right{
+width:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+background:#4f5c63;
 }
 
-h2{
-  color:#0b6b4f;
+/* CARD */
+.card{
+width:520px;
+background:#fff;
+padding:25px;
+border-radius:10px;
 }
 
-input, select, textarea, button{
-  width:100%;
-  padding:10px;
-  margin:8px 0;
-  border-radius:6px;
-  border:1px solid #ccc;
+/* TABS */
+.tabs{
+display:flex;
+border-bottom:1px solid #ddd;
+margin-bottom:20px;
 }
 
+.tab{
+flex:1;
+text-align:center;
+padding:10px;
+cursor:pointer;
+color:#1a73e8;
+}
+
+.tab.active{
+color:#0b6b4f;
+font-weight:600;
+border-bottom:2px solid #0b6b4f;
+}
+
+/* INPUT */
+input,textarea,select{
+width:100%;
+padding:10px;
+margin-top:10px;
+border:1px solid #ccc;
+border-radius:6px;
+}
+
+/* BUTTON */
 button{
-  background:#0b6b4f;
-  color:white;
-  border:none;
-  cursor:pointer;
+margin-top:10px;
+padding:10px 15px;
+border:none;
+border-radius:5px;
+cursor:pointer;
 }
 
-.status-bar{
-  display:flex;
-  justify-content:space-between;
-  margin-top:15px;
+.btn-green{background:#0b6b4f;color:#fff;}
+.btn-grey{background:#666;color:#fff;}
+
+/* REPORT */
+.report{
+border:1px solid #ddd;
+margin-top:10px;
+padding:10px;
+border-radius:6px;
+cursor:pointer;
 }
 
-.step{
-  flex:1;
-  text-align:center;
-  position:relative;
-}
-
-.step::before{
-  content:"";
-  height:6px;
-  background:#ccc;
-  position:absolute;
-  top:10px;
-  left:-50%;
-  width:100%;
-  z-index:0;
-}
-
-.step:first-child::before{
-  display:none;
-}
-
-.circle{
-  width:20px;
-  height:20px;
-  border-radius:50%;
-  background:#ccc;
-  margin:auto;
-  position:relative;
-  z-index:1;
-}
-
-.active .circle{
-  background:#0b6b4f;
-}
-
-.label{
-  font-size:12px;
-  margin-top:5px;
+.badge{
+font-size:12px;
+background:#eee;
+padding:3px 8px;
+border-radius:5px;
 }
 </style>
+
 </head>
 
 <body>
 
-<div class="container">
+<div class="wrapper">
 
-<h2>Whistleblowing</h2>
-
-<div class="box">
-<h3>Inserisci segnalazione</h3>
-
-<input id="obj" placeholder="Oggetto">
-
-<select id="category">
-<option>Corruzione</option>
-<option>Abuso</option>
-<option>Sicurezza</option>
-<option>Altro</option>
-</select>
-
-<textarea id="desc" placeholder="Descrizione"></textarea>
-
-<button onclick="send()">Invia</button>
-
-<p id="result"></p>
+<!-- SINISTRA -->
+<div class="left">
+<img src="logo-gemelli.png">
 </div>
 
-<div class="box">
-<h3>Verifica segnalazione</h3>
+<!-- DESTRA -->
+<div class="right">
 
-<input id="code" placeholder="Codice segnalazione">
-<button onclick="check()">Verifica</button>
+<div class="card">
 
-<div id="out"></div>
+<!-- TABS -->
+<div class="tabs">
+<div class="tab active" onclick="showTab('insert',this)">INSERISCI</div>
+<div class="tab" onclick="showTab('verify',this)">VERIFICA</div>
+<div class="tab" onclick="showTab('resp',this)">RESPONSABILI</div>
+</div>
+
+<!-- INSERISCI -->
+<div id="insert">
+
+<div id="formBox">
+
+<input id="obj" placeholder="Oggetto segnalazione">
+<textarea id="desc" placeholder="Descrizione"></textarea>
+<input id="anon" placeholder="Anonimo SI / NO">
+
+<button class="btn-green" onclick="send()">INVIA</button>
+
+</div>
+
+<div id="success" style="display:none;text-align:center">
+<h3>Segnalazione inviata</h3>
+<div id="code"></div>
+<button class="btn-green" onclick="reset()">OK</button>
+</div>
+
+</div>
+
+<!-- VERIFICA -->
+<div id="verify" style="display:none">
+
+<input id="check" placeholder="Codice segnalazione">
+
+<button class="btn-green" onclick="verify()">VERIFICA</button>
+
+<div id="result"></div>
+
+<div id="track" style="display:none;margin-top:20px">
+<b>Stato:</b> <span id="status"></span>
+</div>
+
+</div>
+
+<!-- RESPONSABILI -->
+<div id="resp" style="display:none">
+
+<div id="login">
+<input id="u" placeholder="user">
+<input id="p" type="password" placeholder="pass">
+<button class="btn-green" onclick="login()">ENTRA</button>
+</div>
+
+<div id="panel" style="display:none">
+
+<h4>Segnalazioni</h4>
+<div id="list"></div>
+
+<h4>Cambia stato</h4>
+
+<select id="st">
+<option>Ricevuta</option>
+<option>In analisi</option>
+<option>In revisione</option>
+<option>Chiusa</option>
+</select>
+
+<button class="btn-green" onclick="change()">Aggiorna</button>
+
+</div>
+
+</div>
+
 </div>
 
 </div>
 
 <script>
 
-function getStep(status){
-  const steps = ["Ricevuta","In verifica","In lavorazione","Chiusa"];
-  return steps.indexOf(status);
+/* ====== SIMULAZIONE TEMPORANEA ====== */
+/* (poi lo colleghiamo al server vero) */
+
+let reports=[];
+let selected=null;
+
+function showTab(t,el){
+
+document.getElementById("insert").style.display="none";
+document.getElementById("verify").style.display="none";
+document.getElementById("resp").style.display="none";
+
+document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
+el.classList.add("active");
+
+document.getElementById(t).style.display="block";
 }
 
-function renderStatus(status){
-  const steps = ["Ricevuta","In verifica","In lavorazione","Chiusa"];
-  let current = getStep(status);
-
-  return `
-  <div class="status-bar">
-    ${steps.map((s,i)=>`
-      <div class="step ${i<=current?'active':''}">
-        <div class="circle"></div>
-        <div class="label">${s}</div>
-      </div>
-    `).join("")}
-  </div>
-  `;
+function code(){
+return "WH-"+Math.floor(100000+Math.random()*900000);
 }
 
-async function send(){
-let obj=document.getElementById("obj").value;
-let category=document.getElementById("category").value;
-let desc=document.getElementById("desc").value;
+/* INSERIMENTO */
+function send(){
 
-let res=await fetch("/api/segnalazione",{
-method:"POST",
-headers:{"Content-Type":"application/json"},
-body:JSON.stringify({obj,category,desc})
-});
+let obj=document.getElementById("obj").value.trim();
+let desc=document.getElementById("desc").value.trim();
+let anon=document.getElementById("anon").value.trim();
 
-let data=await res.json();
-
-document.getElementById("result").innerHTML="Codice segnalazione: <b>"+data.code+"</b>";
-}
-
-async function check(){
-let code=document.getElementById("code").value;
-
-let res=await fetch("/api/verifica/"+code);
-let data=await res.json();
-
-if(data.error){
-document.getElementById("out").innerHTML="Non trovata";
+if(!obj||!desc||!anon){
+alert("compila tutto");
 return;
 }
 
-document.getElementById("out").innerHTML=`
-<div class="box">
-<b>Codice:</b> ${data.code}<br>
-<b>Oggetto:</b> ${data.obj}<br>
-<b>Categoria:</b> ${data.category}<br>
-<b>Stato:</b> ${data.status}
+let c=code();
 
-${renderStatus(data.status)}
+reports.push({
+code:c,
+obj:obj,
+desc:desc,
+status:"Ricevuta"
+});
 
-</div>
-`;
+document.getElementById("formBox").style.display="none";
+document.getElementById("success").style.display="block";
+document.getElementById("code").innerText=c;
+}
+
+/* RESET */
+function reset(){
+document.getElementById("success").style.display="none";
+document.getElementById("formBox").style.display="block";
+}
+
+/* VERIFICA */
+function verify(){
+
+let c=document.getElementById("check").value;
+let r=reports.find(x=>x.code===c);
+
+if(r){
+document.getElementById("result").innerHTML="✔ trovata "+r.code;
+document.getElementById("track").style.display="block";
+document.getElementById("status").innerText=r.status;
+}else{
+document.getElementById("result").innerHTML="✖ non trovata";
+document.getElementById("track").style.display="none";
+}
+
+}
+
+/* LOGIN */
+function login(){
+
+if(document.getElementById("u").value==="admin" &&
+document.getElementById("p").value==="1234"){
+
+document.getElementById("login").style.display="none";
+document.getElementById("panel").style.display="block";
+load();
+
+}else alert("no");
+
+}
+
+/* LISTA */
+function load(){
+
+let l=document.getElementById("list");
+l.innerHTML="";
+
+reports.forEach(r=>{
+
+let d=document.createElement("div");
+d.className="report";
+
+d.innerHTML=`${r.code}<br><span class="badge">${r.status}</span>`;
+
+d.onclick=()=>selected=r;
+
+l.appendChild(d);
+
+});
+
+}
+
+/* CAMBIO STATO */
+function change(){
+
+if(!selected)return;
+
+selected.status=document.getElementById("st").value;
+
+load();
+
+alert("aggiornato");
+
 }
 
 </script>
