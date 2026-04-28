@@ -11,44 +11,35 @@ font-family:Segoe UI, Arial;
 background:#0f172a;
 }
 
-/* LAYOUT */
 .wrapper{
 display:flex;
 height:100vh;
 }
 
-/* SINISTRA */
+/* LEFT */
 .left{
 flex:1;
 display:flex;
 flex-direction:column;
 justify-content:center;
 align-items:center;
-background:#0f172a;
 color:white;
+background:#0f172a;
 padding:40px;
 text-align:center;
 }
 
-/* FIX LOGO */
 .left img{
 width:180px;
-max-width:80%;
 margin-bottom:20px;
 }
 
-.left p{
-opacity:0.8;
-font-size:14px;
-max-width:300px;
-}
-
-/* DESTRA */
+/* RIGHT */
 .right{
 flex:1.2;
 display:flex;
-align-items:center;
 justify-content:center;
+align-items:center;
 background:#f1f5f9;
 padding:20px;
 }
@@ -57,8 +48,8 @@ padding:20px;
 .card{
 width:520px;
 background:white;
-border-radius:16px;
 padding:25px;
+border-radius:16px;
 box-shadow:0 20px 60px rgba(0,0,0,0.15);
 }
 
@@ -93,10 +84,7 @@ border-radius:10px;
 border:1px solid #cbd5e1;
 }
 
-textarea{
-height:110px;
-resize:none;
-}
+textarea{height:100px;}
 
 /* BUTTON */
 button{
@@ -106,28 +94,27 @@ padding:10px;
 border:none;
 border-radius:10px;
 cursor:pointer;
-font-weight:600;
 background:#0b6b4f;
 color:white;
+font-weight:600;
 }
 
-/* STATUS BAR */
+/* STATUS */
 .status-bar{
 display:flex;
 justify-content:space-between;
-margin-top:15px;
+margin-top:20px;
 font-size:12px;
 }
 
 .step{
-flex:1;
 text-align:center;
-position:relative;
+flex:1;
 }
 
 .circle{
-width:12px;
-height:12px;
+width:10px;
+height:10px;
 border-radius:50%;
 background:#cbd5e1;
 margin:auto;
@@ -137,11 +124,6 @@ margin:auto;
 background:#0b6b4f;
 }
 
-.label{
-margin-top:5px;
-}
-
-/* REPORT */
 .report{
 padding:10px;
 border:1px solid #e2e8f0;
@@ -156,41 +138,29 @@ margin-top:10px;
 
 <div class="wrapper">
 
-<!-- SINISTRA -->
+<!-- LEFT -->
 <div class="left">
-
 <img src="./logo-gemelli.png">
-
-<p>Sistema anonimo e sicuro del Policlinico.</p>
-
+<p>Sistema anonimo del Policlinico</p>
 </div>
 
-<!-- FIX LOGO PATH -->
-<img src="./logo-gemelli.png" onerror="this.style.display='none'">
-
-<h2>Whistleblowing System</h2>
-<p>Sistema anonimo e sicuro del Policlinico.</p>
-
-</div>
-
-<!-- DESTRA -->
+<!-- RIGHT -->
 <div class="right">
 
 <div class="card">
 
-<!-- TABS -->
 <div class="tabs">
 <div class="tab active" onclick="show('ins',this)">Inserisci</div>
 <div class="tab" onclick="show('ver',this)">Verifica</div>
 <div class="tab" onclick="show('adm',this)">Responsabili</div>
 </div>
 
-<!-- INSERISCI (FORM COMPLETO) -->
+<!-- INSERISCI -->
 <div id="ins">
 
-<<input id="email" placeholder="La tua email">
+<input id="email" type="email" placeholder="La tua email">
 
-<input id="obj" placeholder="Oggetto segnalazione">
+<input id="obj" placeholder="Oggetto">
 
 <select id="cat">
 <option>Corruzione</option>
@@ -199,17 +169,17 @@ margin-top:10px;
 <option>Altro</option>
 </select>
 
-<textarea id="desc" placeholder="Descrizione dettagliata"></textarea>
+<textarea id="desc" placeholder="Descrizione"></textarea>
 
 <input id="anon" placeholder="Anonimo SI / NO">
 
-<button onclick="send()">Invia segnalazione</button>
+<button onclick="send()">Invia</button>
 
 <div id="out1"></div>
 
 </div>
 
-<!-- VERIFICA + STATO COMPLETO -->
+<!-- VERIFICA -->
 <div id="ver" style="display:none">
 
 <input id="code" placeholder="Codice WH-XXXXXX">
@@ -218,13 +188,13 @@ margin-top:10px;
 
 <div id="out2"></div>
 
-<div id="track" style="display:none;margin-top:20px">
+<div id="track" style="display:none">
 
 <div class="status-bar">
-<div class="step"><div class="circle"></div><div class="label">Ricevuta</div></div>
-<div class="step"><div class="circle"></div><div class="label">In analisi</div></div>
-<div class="step"><div class="circle"></div><div class="label">Revisione</div></div>
-<div class="step"><div class="circle"></div><div class="label">Chiusa</div></div>
+<div class="step"><div class="circle"></div><div>Ricevuta</div></div>
+<div class="step"><div class="circle"></div><div>Analisi</div></div>
+<div class="step"><div class="circle"></div><div>Revisione</div></div>
+<div class="step"><div class="circle"></div><div>Chiusa</div></div>
 </div>
 
 </div>
@@ -237,7 +207,7 @@ margin-top:10px;
 <input id="u" placeholder="user">
 <input id="p" type="password" placeholder="password">
 
-<button onclick="login()">Accedi</button>
+<button onclick="login()">Login</button>
 
 <div id="panel" style="display:none">
 
@@ -245,7 +215,7 @@ margin-top:10px;
 
 <select id="st">
 <option>Ricevuta</option>
-<option>In analisi</option>
+<option>Analisi</option>
 <option>Revisione</option>
 <option>Chiusa</option>
 </select>
@@ -266,78 +236,66 @@ let reports=[];
 let selected=null;
 
 function show(t,el){
-
 ["ins","ver","adm"].forEach(x=>document.getElementById(x).style.display="none");
 document.querySelectorAll(".tab").forEach(x=>x.classList.remove("active"));
-
 document.getElementById(t).style.display="block";
 el.classList.add("active");
-
 }
 
-/* CODE */
-function code(){
-return "WH-"+Math.floor(100000+Math.random()*900000);
-}
-
-/* INSERIMENTO */
 function send(){
-
-let email=document.getElementById("email").value;
-let obj=document.getElementById("obj").value;
-let cat=document.getElementById("cat").value;
-let desc=document.getElementById("desc").value;
-let anon=document.getElementById("anon").value;
 
 fetch("/api/segnalazione",{
 method:"POST",
 headers:{"Content-Type":"application/json"},
-body:JSON.stringify({email,obj,cat,desc,anon})
+body:JSON.stringify({
+email:email.value,
+obj:obj.value,
+cat:cat.value,
+desc:desc.value,
+anon:anon.value
+})
 })
 .then(r=>r.json())
-.then(data=>{
-document.getElementById("out1").innerHTML=
-"Codice: <b>"+data.code+"</b><br>Controlla la tua email";
+.then(d=>{
+out1.innerHTML="Codice: <b>"+d.code+"</b>";
 });
 
 }
 
-/* VERIFICA + STATO */
 function check(){
 
-let c=document.getElementById("code").value;
-let r=reports.find(x=>x.code===c);
+fetch("/api/verifica/"+code.value)
+.then(r=>r.json())
+.then(r=>{
 
-if(!r){
-document.getElementById("out2").innerHTML="Non trovata";
-document.getElementById("track").style.display="none";
+if(r.error){
+out2.innerHTML="Non trovata";
 return;
 }
 
-document.getElementById("out2").innerHTML=
-"✔ trovata <b>"+r.code+"</b><br>Stato: "+r.status;
+out2.innerHTML="✔ "+r.code+" - "+r.status;
+track.style.display="block";
 
-document.getElementById("track").style.display="block";
+});
 
 }
 
-/* LOGIN */
 function login(){
-
 if(u.value==="admin" && p.value==="1234"){
-document.getElementById("panel").style.display="block";
+panel.style.display="block";
 load();
-}else alert("err");
-
+}
 }
 
-/* LISTA */
 function load(){
 
-let l=document.getElementById("list");
-l.innerHTML="";
+list.innerHTML="";
 
-reports.forEach(r=>{
+fetch("/api/list")
+.then(r=>r.json())
+.then(data=>{
+
+data.forEach(r=>{
 
 let d=document.createElement("div");
 d.className="report";
@@ -345,18 +303,24 @@ d.innerHTML=r.code+" - "+r.status;
 
 d.onclick=()=>selected=r;
 
-l.appendChild(d);
+list.appendChild(d);
+
+});
 
 });
 
 }
 
-/* UPDATE */
 function update(){
 
-if(!selected)return;
-
-selected.status=document.getElementById("st").value;
+fetch("/api/update",{
+method:"POST",
+headers:{"Content-Type":"application/json"},
+body:JSON.stringify({
+code:selected.code,
+status:st.value
+})
+});
 
 load();
 

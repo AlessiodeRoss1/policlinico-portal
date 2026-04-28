@@ -4,27 +4,27 @@ const nodemailer = require("nodemailer");
 const app = express();
 app.use(express.json());
 
-let reports = [];
+let reports=[];
 
 function code(){
 return "WH-"+Math.floor(100000+Math.random()*900000);
 }
 
-/* EMAIL CONFIG (GMAIL) */
+/* EMAIL */
 const transporter = nodemailer.createTransport({
 service:"gmail",
 auth:{
-user:"TUO_EMAIL@gmail.com",
-pass:"PASSWORD_APP_GMAIL"
+user:"policlinicogemellirrp@gmail.com",
+pass:"wxdy rwnu nixn iexs"
 }
 });
 
-/* API INSERIMENTO */
+/* INSERIMENTO */
 app.post("/api/segnalazione",(req,res)=>{
 
 let c = code();
 
-let report={
+let r={
 code:c,
 email:req.body.email,
 obj:req.body.obj,
@@ -33,23 +33,14 @@ desc:req.body.desc,
 status:"Ricevuta"
 };
 
-reports.push(report);
+reports.push(r);
 
 /* EMAIL */
 transporter.sendMail({
-from:"Whistleblowing <TUO_EMAIL@gmail.com>",
+from:"Whistleblowing <policlinicogemellirrp@gmail.com>",
 to:req.body.email,
-subject:"Conferma segnalazione "+c,
-text:`
-Segnalazione ricevuta
-
-Codice: ${c}
-Oggetto: ${req.body.obj}
-Categoria: ${req.body.cat}
-Stato: Ricevuta
-
-Conserva questo codice per il tracking.
-`
+subject:"Segnalazione "+c,
+text:`Codice: ${c}\nStato: Ricevuta`
 });
 
 res.json({code:c});
@@ -60,12 +51,26 @@ res.json({code:c});
 app.get("/api/verifica/:code",(req,res)=>{
 
 let r=reports.find(x=>x.code===req.params.code);
-
 if(!r) return res.json({error:true});
 
 res.json(r);
 
 });
 
-const PORT = process.env.PORT || 3000;
+/* LISTA ADMIN */
+app.get("/api/list",(req,res)=>{
+res.json(reports);
+});
+
+/* UPDATE STATO */
+app.post("/api/update",(req,res)=>{
+
+let r=reports.find(x=>x.code===req.body.code);
+if(r) r.status=req.body.status;
+
+res.json({ok:true});
+
+});
+
+const PORT=process.env.PORT||3000;
 app.listen(PORT,()=>console.log("Server attivo "+PORT));
